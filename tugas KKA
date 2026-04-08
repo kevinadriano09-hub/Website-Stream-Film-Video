@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FKGRV STREAM - Streaming Film Terbaik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #141414;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 4%;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #e50914, #f5f5f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            margin-left: 50px;
+        }
+
+        .nav-item {
+            margin-right: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: #e50914;
+        }
+
+        .nav-item.active {
+            color: #e50914;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #e50914;
+        }
+
+        .profile {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .profile i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1489599091523-2e9e7feca91d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 4%;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            max-width: 700px;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            max-width: 500px;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: white;
+            color: black;
+        }
+
+        .btn-primary:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Genre Filter */
+        .genre-filter {
+            padding: 20px 4%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .genre-filter::-webkit-scrollbar {
+            display: none;
+        }
+
+        .genre-btn {
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .genre-btn.active, .genre-btn:hover {
+            background: #e50914;
+            border-color: #e50914;
+            color: white;
+        }
+
+        /* Content Rows */
+        .content {
+            padding-top: 80px;
+        }
+
+        .section-tabs {
+            padding: 0 4%;
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 25px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .tab-btn.active {
+            background: #e50914;
+        }
+
+        .row {
+            margin-bottom: 40px;
+        }
+
+        .row-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 0 4%;
+            margin-bottom: 15px;
+        }
+
+        .row-subtitle {
+            padding: 0 4%;
+            margin-bottom: 10px;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .row-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 4%;
+            gap: 15px;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .row-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .movie-card {
+            min-width: 250px;
+            height: 350px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .movie-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .movie-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .movie-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .type-badge {
+            padding: 2px 8px;
+            background: #e50914;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .movie-year {
+            opacity: 0.8;
+        }
+
+        /* ML Recommendation */
+        .ml-section {
+            padding: 40px 4%;
+            background: linear-gradient(135deg, rgba(229,9,20,0.1), rgba(0,0,0,0.5));
+            margin: 40px 0;
+            border-radius: 10px;
+        }
+
+        .ml-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .ml-subtitle {
+            color: #ccc;
+            margin-bottom: 25px;
+        }
+
+        /* Modal Player */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-container {
+            width: 90%;
+            max-width: 1200px;
+            height: 70%;
+            position: relative;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .player-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .movie-card {
+                min-width: 200px;
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">FKGRV STREAM</div>
+        <div class="nav">
+            <div class="nav-item active" data-tab="home">Beranda</div>
+            <div class="nav-item" data-tab="movies">Film</div>
+            <div class="nav-item" data-tab="series">Serial TV</div>
+            <div class="nav-item">Baru Tayang</div>
+        </div>
+        <div class="profile">
+            <i class="fas fa-search"></i>
+            <i class="fas fa-bell"></i>
+            <i class="fas fa-user-circle" style="font-size: 32px;"></i>
+        </div>
+    </header>
+
+    <!-- Genre Filter -->
+    <div class="genre-filter" id="genreFilter">
+        <div class="genre-btn active" data-genre="all">Semua Genre</div>
+        <div class="genre-btn" data-genre="action">Aksi</div>
+        <div class="genre-btn" data-genre="drama">Drama</div>
+        <div class="genre-btn" data-genre="comedy">Komedi</div>
+        <div class="genre-btn" data-genre="thriller">Thriller</div>
+        <div class="genre-btn" data-genre="horror">Horor</div>
+        <div class="genre-btn" data-genre="romance">Romansa</div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Tonton Film Favoritmu</h1>
+            <p>Nikmati ribuan film dan serial TV terbaik dari seluruh dunia dengan kualitas HD. Streaming tanpa batas, kapan saja, di mana saja.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary">
+                    <i class="fas fa-play"></i>
+                    Tonton Sekarang
+                </button>
+                <button class="btn btn-secondary">
+                    <i class="fas fa-info-circle"></i>
+                    Pelajari Lebih Lanjut
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <main class="content">
+        <!-- Section Tabs -->
+        <div class="section-tabs">
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-section="home">Beranda</button>
+                <button class="tab-btn" data-section="movies">Film</button>
+                <button class="tab-btn" data-section="series">Serial TV</button>
+            </div>
+        </div>
+
+        <!-- ML Recommendation -->
+        <section class="ml-section">
+            <h2 class="ml-title">Rekomendasi Pribadi Untukmu</h2>
+            <p class="ml-subtitle">Berdasarkan preferensi genre yang kamu sukai</p>
+            <div class="row-container" id="mlRecommendations">
+                <!-- ML generated cards -->
+            </div>
+        </section>
+
+        <!-- Home Content -->
+        <div id="homeContent">
+            <!-- Trending -->
+            <div class="row">
+                <h2 class="row-title">Sedang Trending</h2>
+                <div class="row-container" id="trending"></div>
+            </div>
+
+            <div class="row">
+                <div class="row-subtitle">FILM</div>
+                <h2 class="row-title">Film Terpopuler</h2>
+                <div class="row-container" id="popularMovies"></div>
+            </div>
+
+            <div class="row">
+                <div class="row-subtitle">SERIAL TV</div>
+                <h2 class="row-title">Serial TV Terpopuler</h2>
+                <div class="row-container" id="popularSeries"></div>
+            </div>
+        </div>
+
+        <!-- Movies Content -->
+        <div id="moviesContent" style="display: none;">
+            <div class="row">
+                <h2 class="row-title">Film Terbaik</h2>
+                <div class="row-container" id="movies"></div>
+            </div>
+        </div>
+
+        <!-- Series Content -->
+        <div id="seriesContent" style="display: none;">
+            <div class="row">
+                <h2 class="row-title">Serial TV Terbaik</h2>
+                <div class="row-container" id="series"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Video Player Modal -->
+    <div class="modal" id="videoModal">
+        <div class="player-container">
+            <button class="close-btn" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <video class="video-player" id="videoPlayer" controls>
+                Browser Anda tidak mendukung video HTML5.
+            </video>
+            <div class="player-controls">
+                <button class="btn btn-primary" onclick="toggleFullscreen()">
+                    <i class="fas fa-expand"></i> Layar Penuh
+                </button>
+                <div style="margin-left: auto; color: #ccc;">
+                    0:30 / 2:15:42
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Extended movie data dengan type dan genre
+        const moviesData = {
+            movies: [
+                {title: "Avengers: Endgame", year: "2019", type: "movie", genre: "action", img: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&w=400&h=560&fit=crop"},
+                {title: "Dune", year: "2021", type: "movie", genre: "drama", img: "https://images.unsplash.com/photo-1635805734198-095ee50fb3f8?ixlib=rb-4.0.3&w=400&h=560&fit=crop"},
+                {title: "The Batman", year: "2022", type: "movie", genre: "thriller", img: "https://images.unsplash.com/photo-1652234837407-6a775a8b6e8a?ixlib=rb-4.0.3&w=400&h=560&fit=crop"},
+                {title: "Oppenheimer", year: "2023", type: "movie", genre: "drama", img: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&w=400&h=560&fit=crop"},
+                {title: "John Wick 4", year: "2023", type: "movie", genre: "action", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&w=400&h=560&fit=crop"},
+                {title: "Deadpool", year: "2016", type: "movie", genre: "comedy", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&w=400&h=560&fit=crop"}
+            ],
+            series: [
+                {title: "The Last of Us", year: "2023", type: "series", genre: "drama", img: "https://images.unsplash.com/photo-1489599091523-2e9e7feca91d?ixlib=rb-4.0.3&w=400&h=560&fit=crop"},
+                {title: "House of the Dragon", year: "2022", type: "series", genre: "thriller", img: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&w=400&h=560&fit=crop"},
+                {title: "The Boys", year: "2019", type: "series", genre: "action", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a
